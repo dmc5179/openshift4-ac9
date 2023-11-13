@@ -1,16 +1,16 @@
----
-apiVersion: v1
-kind: PersistentVolumeClaim
-metadata:
-  name: ac9-pv-claim
-  labels:
-    app: ac9
-spec:
-  accessModes:
-    - ReadWriteOnce
-  resources:
-    requests:
-      storage: 10Gi
+#---
+#apiVersion: v1
+#kind: PersistentVolumeClaim
+#metadata:
+#  name: ac9-pv-claim
+#  labels:
+#    app: ac9
+#spec:
+#  accessModes:
+#    - ReadWriteOnce
+#  resources:
+#    requests:
+#      storage: 10Gi
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -57,11 +57,25 @@ spec:
         ports:
         - containerPort: 12312
           name: syslog-port
-        volumeMounts:
-        - name: ac9-persistent-storage
-          mountPath: /opt/data
-      volumes:
-      - name: ac9-persistent-storage
-        persistentVolumeClaim:
-          claimName: ac9-pv-claim
+#        volumeMounts:
+#        - name: ac9-persistent-storage
+#          mountPath: /opt/data
+#      volumes:
+#      - name: ac9-persistent-storage
+#        persistentVolumeClaim:
+#          claimName: ac9-pv-claim
 ---
+apiVersion: v1
+kind: Service
+metadata:
+  name: syslog
+  labels:
+    app: ac9
+spec:
+  ports:
+    - port: 12312
+      name: syslog-port
+      protocol: UDP
+      targetPort: 12312
+  selector:
+    app: ac9
