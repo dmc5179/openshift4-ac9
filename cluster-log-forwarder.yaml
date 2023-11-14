@@ -18,6 +18,7 @@ spec:
   serviceAccountName: rsyslog
   pipelines:
    - name: syslog-east 
+     detectMultilineErrors: true
      inputRefs: 
      - audit
      outputRefs: 
